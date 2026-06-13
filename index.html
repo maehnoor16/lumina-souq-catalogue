@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina Souq — Product Catalog 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#022C2F;--emerald:#0A5C5B;--cyan:#4FE3E1;--mint:#9FF7F5;
+  --ink:#0D1F20;--ink2:#1A3A3D;--muted:#5A7A7D;--border:#D8ECED;
+  --bg:#F5FAFA;--white:#FFFFFF;--card:#FFFFFF;
+  --dr:#0A5C5B;--stoff:#0D7C6E;--lux:#B8860B;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+/* HEADER */
+.site-header{background:var(--teal);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100}
+.logo{display:flex;flex-direction:column;gap:0}
+.logo-main{font-family:'Playfair Display',serif;color:#fff;font-size:18px;font-weight:900;letter-spacing:3px}
+.logo-sub{font-size:9px;color:var(--cyan);letter-spacing:4px;font-weight:600}
+.header-nav{display:flex;gap:1.5rem;align-items:center}
+.header-nav a{color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;cursor:pointer;transition:color 0.2s;text-decoration:none}
+.header-nav a:hover,.header-nav a.active{color:var(--cyan)}
+.search-box{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:6px 14px;color:#fff;font-size:13px;width:200px;outline:none}
+.search-box::placeholder{color:rgba(255,255,255,0.5)}
+.search-box:focus{background:rgba(255,255,255,0.18);border-color:var(--cyan)}
+
+/* HERO STRIP */
+.hero-strip{background:linear-gradient(135deg,#022C2F 0%,#0A5C5B 60%,#0D7C6E 100%);padding:2.5rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.hero-title{font-family:'Playfair Display',serif;font-size:32px;color:#fff;font-weight:900;line-height:1.15}
+.hero-title span{color:var(--cyan)}
+.hero-meta{font-size:13px;color:rgba(255,255,255,0.65);margin-top:6px}
+.hero-stats{display:flex;gap:2.5rem}
+.stat{text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--cyan)}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,0.6);font-weight:500;letter-spacing:1px;margin-top:2px}
+
+/* BULK STRIP */
+.bulk-strip{background:linear-gradient(90deg,#0D1F20 0%,#022C2F 50%,#0A5C5B 100%);padding:14px 2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;border-bottom:1px solid rgba(79,227,225,0.2)}
+.bulk-strip-text{display:flex;align-items:center;gap:12px;flex:1;min-width:200px}
+.bulk-strip-icon{font-size:28px;line-height:1;opacity:0.9}
+.bulk-strip-title{font-size:14px;font-weight:700;color:#fff;letter-spacing:0.3px}
+.bulk-strip-sub{font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px}
+.bulk-strip-cta{background:var(--cyan);color:var(--teal);border:none;border-radius:10px;padding:10px 18px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap;transition:opacity 0.2s;letter-spacing:0.3px}
+.bulk-strip-cta:hover{opacity:0.9}
+
+/* BRAND TABS */
+.brand-tabs{background:var(--white);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:0;position:sticky;top:64px;z-index:90}
+.brand-tab{padding:16px 24px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand-tab .dot{width:8px;height:8px;border-radius:50%}
+.brand-tab[data-brand="all"] .dot{background:var(--teal)}
+.brand-tab[data-brand="drrinse"] .dot{background:var(--dr)}
+.brand-tab[data-brand="stoff"] .dot{background:var(--stoff)}
+.brand-tab[data-brand="luxaura"] .dot{background:var(--lux)}
+.brand-tab:hover{color:var(--ink)}
+.brand-tab.active{color:var(--ink);border-bottom-color:var(--teal)}
+.brand-tab[data-brand="drrinse"].active{border-bottom-color:var(--dr);color:var(--dr)}
+.brand-tab[data-brand="stoff"].active{border-bottom-color:var(--stoff);color:var(--stoff)}
+.brand-tab[data-brand="luxaura"].active{border-bottom-color:var(--lux);color:var(--lux)}
+.tab-count{font-size:11px;background:#F0F5F5;color:var(--muted);border-radius:10px;padding:1px 7px;font-weight:600}
+
+/* LAYOUT */
+.catalog-layout{display:flex;min-height:calc(100vh - 200px)}
+.sidebar{width:220px;min-width:220px;background:var(--white);border-right:1px solid var(--border);padding:1.5rem 1rem;position:sticky;top:113px;max-height:calc(100vh - 113px);overflow-y:auto}
+.sidebar-section{margin-bottom:1.5rem}
+.sidebar-title{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.filter-item{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-radius:8px;cursor:pointer;transition:background 0.15s;font-size:13px;color:var(--ink2);font-weight:500}
+.filter-item:hover{background:#F0F9F9}
+.filter-item.active{background:#E1F5F4;color:var(--dr);font-weight:600}
+.filter-count{font-size:11px;color:var(--muted);background:#F0F5F5;border-radius:10px;padding:1px 7px}
+
+/* MAIN */
+.catalog-main{flex:1;padding:1.5rem 2rem;overflow:hidden}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.results-count{font-size:13px;color:var(--muted);font-weight:500}
+.results-count strong{color:var(--ink);font-weight:700}
+.view-toggle{display:flex;gap:4px}
+.view-btn{width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted);transition:all 0.15s}
+.view-btn.active{background:var(--teal);border-color:var(--teal);color:#fff}
+
+/* PRODUCT GRID */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem}
+.products-grid.list-view{grid-template-columns:1fr;gap:.75rem}
+
+/* PRODUCT CARD */
+.product-card{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.25s;cursor:pointer;position:relative}
+.product-card:hover{border-color:var(--cyan);transform:translateY(-3px);box-shadow:0 12px 32px rgba(2,44,47,0.12)}
+.product-card.hidden{display:none}
+
+.brand-ribbon{position:absolute;top:12px;left:12px;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:10px;z-index:2}
+.ribbon-drrinse{background:#E1F0EE;color:#0A5C5B}
+.ribbon-stoff{background:#E1F2EE;color:#0D7C6E}
+.ribbon-luxaura{background:#FDF5DC;color:#8B6508}
+
+/* IMAGE PLACEHOLDER */
+.product-img{height:180px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#F8FAFA}
+.product-img.drrinse-img{background:linear-gradient(145deg,#EAF6F5,#F0FAFA)}
+.product-img.stoff-img{background:linear-gradient(145deg,#EAF6F2,#F0FAF5)}
+.product-img.luxaura-img{background:linear-gradient(145deg,#FEFBF0,#FDF8E8)}
+.product-img img{width:100%;height:100%;object-fit:contain;padding:12px;display:block}
+.img-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0.6}
+.img-placeholder .bottle{font-size:52px;line-height:1}
+.img-placeholder span{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px}
+
+/* CARD BODY */
+.card-body{padding:14px 14px 16px}
+.card-brand-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
+.card-category{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center}
+.card-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.3}
+.card-sizes{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:8px}
+.card-sizes strong{color:var(--ink2);font-weight:600}
+.bulk-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;letter-spacing:0.8px;background:#E8F8F7;color:#0A5C5B;border:1px solid #B0DDD9;border-radius:8px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.bulk-pack-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:2.5rem 1.5rem;width:100%;background:linear-gradient(160deg,#F0FAFA,#E8F5F4);border:2px dashed #B0DDD9;border-radius:16px}
+.bulk-pack-placeholder .bulk-pack-icon{font-size:64px;line-height:1;opacity:0.85}
+.bulk-pack-placeholder .bulk-pack-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--teal)}
+.bulk-pack-placeholder .bulk-pack-size{font-size:15px;font-weight:700;color:var(--emerald)}
+.bulk-pack-placeholder .bulk-pack-note{font-size:12px;color:var(--muted);font-weight:500;max-width:260px;line-height:1.5}
+.detail-bulk-note{font-size:12px;color:var(--emerald);font-weight:600;background:#E8F8F7;border:1px solid #B0DDD9;border-radius:10px;padding:10px 14px;margin-top:4px;line-height:1.5}
+.variant-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.pill{font-size:10px;font-weight:600;border-radius:10px;padding:2px 8px;border:1px solid}
+.pill-drrinse{background:#EAF5F4;color:#0A5C5B;border-color:#B0DDD9}
+.pill-stoff{background:#EAF5F0;color:#0D7C6E;border-color:#A0DBC8}
+.pill-luxaura{background:#FEF9E7;color:#8B6508;border-color:#E8D090}
+.card-footer-row{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border)}
+.brand-label{font-size:11px;font-weight:700;letter-spacing:0.5px}
+.brand-label.drrinse{color:var(--dr)}
+.brand-label.stoff{color:var(--stoff)}
+.brand-label.luxaura{color:var(--lux)}
+.catalog-btn{background:var(--teal);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;transition:background 0.2s;letter-spacing:0.5px}
+.catalog-btn:hover{background:var(--emerald)}
+.catalog-btn.luxaura-btn{background:var(--lux)}
+.catalog-btn.luxaura-btn:hover{background:#9B7100}
+.catalog-btn.stoff-btn{background:var(--stoff)}
+.catalog-btn.stoff-btn:hover{background:#0A6055}
+
+/* LIST VIEW CARD */
+.list-view .product-card{display:flex;align-items:stretch;border-radius:12px}
+.list-view .product-img{width:120px;min-width:120px;height:auto;min-height:100px}
+.list-view .card-body{flex:1;display:flex;align-items:center;gap:1.5rem}
+.list-view .card-info{flex:1}
+.list-view .card-name{margin-bottom:4px;font-size:15px}
+.list-view .card-sizes{margin-bottom:0}
+.list-view .variant-pills{margin-bottom:0}
+.list-view .brand-ribbon{top:8px;left:8px}
+
+/* BRAND SECTION DIVIDER */
+.brand-divider{grid-column:1/-1;display:flex;align-items:center;gap:1rem;margin:0.5rem 0}
+.divider-pill{font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 14px;border-radius:20px;white-space:nowrap}
+.divider-drrinse{background:#0A5C5B;color:#fff}
+.divider-stoff{background:#0D7C6E;color:#fff}
+.divider-luxaura{background:#B8860B;color:#fff}
+.divider-line{flex:1;height:1px;background:var(--border)}
+
+/* EMPTY */
+.empty-state{grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--muted)}
+.empty-state .e-icon{font-size:48px;margin-bottom:1rem;opacity:0.4}
+.empty-state p{font-size:15px;font-weight:500}
+
+/* FOOTER */
+.site-footer{background:var(--teal);color:rgba(255,255,255,0.6);text-align:center;padding:1.5rem;font-size:12px;margin-top:2rem}
+.site-footer strong{color:var(--cyan)}
+
+/* PRODUCT DETAIL PAGE */
+.product-detail-page{position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;transform:translateX(100%);transition:transform 0.35s ease;visibility:hidden}
+.product-detail-page.open{transform:translateX(0);visibility:visible}
+.detail-header{background:var(--teal);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.detail-back{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s}
+.detail-back:hover{background:rgba(255,255,255,0.2)}
+.detail-header-brand{font-family:'Playfair Display',serif;color:#fff;font-size:16px;font-weight:700;letter-spacing:2px}
+.detail-body{max-width:1100px;margin:0 auto;padding:2rem}
+.detail-layout{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+.detail-image-wrap{background:var(--white);border:1px solid var(--border);border-radius:20px;overflow:hidden;padding:1.25rem;position:sticky;top:80px}
+.detail-image-wrap.drrinse-img{background:linear-gradient(145deg,#EAF6F5,#F0FAFA)}
+.detail-image-wrap.stoff-img{background:linear-gradient(145deg,#EAF6F2,#F0FAF5)}
+.detail-image-wrap.luxaura-img{background:linear-gradient(145deg,#FEFBF0,#FDF8E8)}
+.detail-gallery{display:flex;flex-direction:column;gap:14px}
+.detail-image-main{min-height:360px;display:flex;align-items:center;justify-content:center;position:relative}
+.detail-image-main img{width:100%;max-height:480px;object-fit:contain;padding:1rem;display:block;transition:opacity 0.2s}
+.detail-image-main img.loading{opacity:0.35}
+.detail-thumbs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:thin}
+.detail-thumb{width:68px;height:68px;min-width:68px;border:2px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;background:#fff;padding:5px;transition:border-color 0.2s,box-shadow 0.2s}
+.detail-thumb:hover{border-color:var(--cyan)}
+.detail-thumb.active{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal)}
+.detail-thumb.no-img{background:#F0F5F5;display:flex;align-items:center;justify-content:center;font-size:18px;opacity:0.45}
+.detail-thumb img{width:100%;height:100%;object-fit:contain;display:block}
+.detail-image-caption{font-size:11px;color:var(--muted);text-align:center;font-weight:600;letter-spacing:0.5px}
+.size-chip.selectable,.detail-variant.selectable{cursor:pointer;transition:all 0.15s}
+.size-chip.selectable:hover,.detail-variant.selectable:hover{transform:translateY(-1px)}
+.size-chip.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.detail-variant.drrinse.active{background:#0A5C5B;color:#fff;border-color:#0A5C5B}
+.detail-variant.stoff.active{background:#0D7C6E;color:#fff;border-color:#0D7C6E}
+.detail-variant.luxaura.active{background:#B8860B;color:#fff;border-color:#B8860B}
+.detail-img-placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0.5;padding:3rem}
+.detail-img-placeholder .bottle{font-size:96px;line-height:1}
+.detail-img-placeholder span{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:1px}
+.detail-info{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:2rem}
+.detail-brand-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 12px;border-radius:20px;margin-bottom:12px}
+.detail-brand-tag.drrinse{background:#E1F0EE;color:#0A5C5B}
+.detail-brand-tag.stoff{background:#E1F2EE;color:#0D7C6E}
+.detail-brand-tag.luxaura{background:#FDF5DC;color:#8B6508}
+.detail-category{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+.detail-name{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:1rem}
+.detail-desc{font-size:15px;color:var(--ink2);line-height:1.7;margin-bottom:1.75rem}
+.detail-section{margin-bottom:1.5rem}
+.detail-section-title{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.detail-sizes{display:flex;flex-wrap:wrap;gap:8px}
+.size-chip{font-size:13px;font-weight:600;background:#F0F9F9;color:var(--ink2);border:1px solid var(--border);border-radius:10px;padding:8px 14px}
+.detail-variants{display:flex;flex-wrap:wrap;gap:8px}
+.detail-variant{font-size:13px;font-weight:600;border-radius:10px;padding:8px 14px;border:1px solid}
+.detail-variant.drrinse{background:#EAF5F4;color:#0A5C5B;border-color:#B0DDD9}
+.detail-variant.stoff{background:#EAF5F0;color:#0D7C6E;border-color:#A0DBC8}
+.detail-variant.luxaura{background:#FEF9E7;color:#8B6508;border-color:#E8D090}
+.detail-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.detail-meta-item{background:#F8FAFA;border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.detail-meta-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.detail-meta-value{font-size:14px;font-weight:600;color:var(--ink)}
+.detail-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.75rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.detail-enquire-btn{flex:1;min-width:160px;background:var(--teal);color:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.2s;letter-spacing:0.5px}
+.detail-enquire-btn:hover{background:var(--emerald)}
+.detail-enquire-btn.stoff{background:var(--stoff)}
+.detail-enquire-btn.stoff:hover{background:#0A6055}
+.detail-enquire-btn.luxaura{background:var(--lux)}
+.detail-enquire-btn.luxaura:hover{background:#9B7100}
+.detail-contact-btn{background:var(--white);color:var(--teal);border:2px solid var(--teal);border-radius:12px;padding:14px 24px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:all 0.2s}
+.detail-contact-btn:hover{background:var(--teal);color:#fff}
+@media(max-width:768px){
+  .detail-layout{grid-template-columns:1fr;gap:1.5rem}
+  .detail-image-wrap{position:static}
+  .detail-image-main{min-height:240px}
+  .detail-image-main img{max-height:300px;padding:0.5rem}
+  .detail-thumb{width:56px;height:56px;min-width:56px}
+  .detail-name{font-size:28px}
+  .detail-body{padding:1.25rem}
+  .detail-meta-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <div class="logo">
+    <span class="logo-main">LUMINA SOUQ</span>
+    <span class="logo-sub">PRODUCT CATALOG 2026</span>
+  </div>
+  <nav class="header-nav">
+    <a onclick="filterBrand('all')" class="active" id="nav-all">All Products</a>
+    <a onclick="filterBrand('drrinse')" id="nav-drrinse">Dr Rinse®</a>
+    <a onclick="filterBrand('stoff')" id="nav-stoff">Stoff®</a>
+    <!-- LUXAURA: uncomment when images are ready
+    <a onclick="filterBrand('luxaura')" id="nav-luxaura">Luxaura®</a>
+    -->
+  </nav>
+  <input class="search-box" type="text" id="searchInput" placeholder="Search products..." oninput="handleSearch()">
+</div>
+
+<div class="hero-strip">
+  <div>
+    <div class="hero-title">Complete <span>Product Portfolio</span><br>2026 Collection</div>
+    <div class="hero-meta">Home Care · Hygiene · Cleaning</div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">2</div><div class="stat-lbl">Brands</div></div>
+    <div class="stat"><div class="stat-num">32+</div><div class="stat-lbl">Categories</div></div>
+    <div class="stat"><div class="stat-num">140+</div><div class="stat-lbl">Variants</div></div>
+    <div class="stat"><div class="stat-num">5L</div><div class="stat-lbl">Max Size</div></div>
+  </div>
+</div>
+
+<div class="bulk-strip">
+  <div class="bulk-strip-text">
+    <span class="bulk-strip-icon">📦</span>
+    <div>
+      <div class="bulk-strip-title">Bulk &amp; wholesale delivery on every product</div>
+      <div class="bulk-strip-sub">All Dr Rinse® and Stoff® products available in commercial sizes up to 5L — ideal for retailers, cleaners &amp; institutions</div>
+    </div>
+  </div>
+  <a class="bulk-strip-cta" href="tel:+923107483390">Call +92 310 7483390</a>
+</div>
+
+<div class="brand-tabs" id="brandTabs">
+  <div class="brand-tab active" data-brand="all" onclick="filterBrand('all')"><span class="dot"></span>All Products<span class="tab-count" id="cnt-all">25</span></div>
+  <div class="brand-tab" data-brand="drrinse" onclick="filterBrand('drrinse')"><span class="dot"></span>Dr Rinse®<span class="tab-count" id="cnt-drrinse">15</span></div>
+  <div class="brand-tab" data-brand="stoff" onclick="filterBrand('stoff')"><span class="dot"></span>Stoff®<span class="tab-count" id="cnt-stoff">10</span></div>
+  <!-- LUXAURA: uncomment when images are ready
+  <div class="brand-tab" data-brand="luxaura" onclick="filterBrand('luxaura')"><span class="dot"></span>Luxaura®<span class="tab-count" id="cnt-luxaura">5</span></div>
+  -->
+</div>
+
+<div class="catalog-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Category</div>
+      <div id="categoryFilters"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Packaging Size</div>
+      <div class="filter-item active" onclick="filterSize('all',this)" id="size-all">
+        <span>All Sizes</span><span class="filter-count"></span>
+      </div>
+      <div class="filter-item" onclick="filterSize('small',this)"><span>Small (75ml–300ml)</span></div>
+      <div class="filter-item" onclick="filterSize('medium',this)"><span>Medium (300ml–1L)</span></div>
+      <div class="filter-item" onclick="filterSize('large',this)"><span>Bulk (1L–5L)</span></div>
+    </div>
+  </aside>
+
+  <main class="catalog-main">
+    <div class="results-header">
+      <div class="results-count" id="resultsCount"><strong>32</strong> products</div>
+      <div class="view-toggle">
+        <button class="view-btn active" title="Grid view" onclick="setView('grid',this)">⊞</button>
+        <button class="view-btn" title="List view" onclick="setView('list',this)">☰</button>
+      </div>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </main>
+</div>
+
+<div class="site-footer">
+  <strong>LUMINA SOUQ (PVT) LTD</strong> &nbsp;·&nbsp; luminasouq2001@gmail.com &nbsp;·&nbsp; +92 310 7483390 &nbsp;·&nbsp; www.luminasouq.com
+</div>
+
+<div class="product-detail-page" id="productDetailPage">
+  <div class="detail-header">
+    <button class="detail-back" onclick="closeProductDetail()">← Back to Catalog</button>
+    <span class="detail-header-brand">LUMINA SOUQ</span>
+  </div>
+  <div class="detail-body" id="productDetailBody"></div>
+</div>
+
+<script>
+const PRODUCTS = [
+  // DR RINSE — image: grid thumbnail · imageSlug: base name for variant+size photos
+  {id:1,brand:'drrinse',brandName:'Dr Rinse®',category:'Fabric Care',name:'Blue Neel',sizes:'75ml · 150ml · 300ml · 5L',variants:['Standard'],emoji:'🧴',sizeRange:'small',imageSlug:'blue-neel',image:'products/blue-neel.webp'},
+  {id:2,brand:'drrinse',brandName:'Dr Rinse®',category:'Drain Care',name:'Drain Buster',sizes:'400ml · 600ml · 1000ml · 1250ml · 5L',variants:['Standard'],emoji:'🧪',sizeRange:'medium',imageSlug:'drain-buster',image:'products/drain-buster.webp'},
+  {id:3,brand:'drrinse',brandName:'Dr Rinse®',category:'Disinfectant',name:'Bleach',sizes:'300ml · 600ml · 1250ml · 5L',variants:['Standard'],emoji:'🫧',sizeRange:'medium',imageSlug:'bleach',image:'products/bleach.webp'},
+  {id:4,brand:'drrinse',brandName:'Dr Rinse®',category:'Bathroom Care',name:'Bathroom Cleaner',sizes:'500ml · 5L',variants:['Standard'],emoji:'🚿',sizeRange:'medium',imageSlug:'bathroom-cleaner',image:'products/bathroom-cleaner.webp'},
+  {id:5,brand:'drrinse',brandName:'Dr Rinse®',category:'Glass Care',name:'Glass Cleaner',sizes:'500ml · 750ml · 5L',variants:['Standard'],emoji:'🪟',sizeRange:'medium',imageSlug:'glass-cleaner',image:'products/glass-cleaner.webp'},
+  {id:6,brand:'drrinse',brandName:'Dr Rinse®',category:'Kitchen Care',name:'Kitchen Cleaner',sizes:'500ml · 5L',variants:['Standard'],emoji:'🍳',sizeRange:'medium',imageSlug:'kitchen-cleaner',image:'products/kitchen-cleaner.webp'},
+  // DR RINSE HANDWASH — uncomment when images are ready
+  // {id:7,brand:'drrinse',brandName:'Dr Rinse®',category:'Hand Care',name:'Handwash',sizes:'500ml · 1L · 5L',variants:['Rose','Jasmine','Lemon','Lavender','Oud','Fresh','Mint'],emoji:'🧼',sizeRange:'medium',imageSlug:'handwash'},
+  // {id:8,brand:'drrinse',brandName:'Dr Rinse®',category:'Hand Care',name:'Handwash Round',sizes:'1L',variants:['Rose','Jasmine','Lemon','Oud'],emoji:'🧼',sizeRange:'medium',imageSlug:'handwash-round'},
+  {id:9,brand:'drrinse',brandName:'Dr Rinse®',category:'Dishwashing',name:'Dishwash',sizes:'250ml · 500ml · 1L · 5L',variants:['Orange','Yellow'],emoji:'🍽️',sizeRange:'medium',imageSlug:'dishwash',image:'products/dishwash.webp'},
+  {id:10,brand:'drrinse',brandName:'Dr Rinse®',category:'Toilet Care',name:'Toilet Cleaner',sizes:'250ml · 500ml · 750ml · 5L',variants:['Standard'],emoji:'🚽',sizeRange:'medium',imageSlug:'toilet-cleaner',image:'products/toilet-cleaner.webp'},
+  {id:11,brand:'drrinse',brandName:'Dr Rinse®',category:'Floor Care',name:'Perfume Phenyl',sizes:'3L · 5L',variants:['Aloevera','Lavender','Tulip'],emoji:'🌿',sizeRange:'large',imageSlug:'perfume-phenyl',image:'products/perfume-phenyl.webp'},
+  {id:12,brand:'drrinse',brandName:'Dr Rinse®',category:'Floor Care',name:'White Phenyl',sizes:'1L · 3L · 5L',variants:['Standard'],emoji:'🫗',sizeRange:'large',imageSlug:'white-phenyl',image:'products/white-phenyl.webp'},
+  {id:13,brand:'drrinse',brandName:'Dr Rinse®',category:'Floor Care',name:'Floor Cleaner',sizes:'1250ml · 5L',variants:['Blue','Green Apple','Lemon','Lavender'],emoji:'🧹',sizeRange:'large',imageSlug:'floor-cleaner',image:'products/floor-cleaner.webp'},
+  {id:14,brand:'drrinse',brandName:'Dr Rinse®',category:'Floor Care',name:'Multi Surface Cleaner',sizes:'450ml · 950ml · 5L',variants:['Lemon','Green Apple','Rose','Lavender'],emoji:'✨',sizeRange:'medium',imageSlug:'multi-surface-cleaner',image:'products/multi-surface-cleaner.webp'},
+  {id:15,brand:'drrinse',brandName:'Dr Rinse®',category:'Kitchen Care',name:'Vinegar',sizes:'80ml · 5L',variants:['Standard'],emoji:'🍶',sizeRange:'small',imageSlug:'vinegar',image:'products/vinegar.webp'},
+  {id:16,brand:'drrinse',brandName:'Dr Rinse®',category:'Floor Care',name:'Concentrate Phenyl',sizes:'475ml · 5L',variants:['Pine','Rose','Lemon'],emoji:'🫙',sizeRange:'medium',imageSlug:'concentrate-phenyl',image:'products/concentrate-phenyl.webp'},
+  {id:17,brand:'drrinse',brandName:'Dr Rinse®',category:'Shine Enhancer',name:'Revivify',sizes:'250ml · 5L',variants:['Standard'],emoji:'💧',sizeRange:'medium',imageSlug:'revivify',image:'products/revivify.webp'},
+  // STOFF
+  {id:18,brand:'stoff',brandName:'Stoff®',category:'Hand Care',name:'Handwash',sizes:'250ml · 500ml · 5L',variants:['Blue Water','Green Apple','Lavender','Lemon','Orange','Rose Pink','Rose Red'],variantsBySize:{'250ml':['Blue Water','Green Apple','Lavender','Lemon','Orange','Rose Pink','Rose Red'],'500ml':['Blue Water','Green Apple']},emoji:'🧼',sizeRange:'medium',imageSlug:'handwash-stoff',image:'products/handwash-stoff.webp'},
+  {id:19,brand:'stoff',brandName:'Stoff®',category:'Hand Care',name:'Handwash Round',sizes:'1L · 5L',variants:['Blue Water','Green Apple','Lavender','Lemon','Orange','Rose Pink','Rose Red'],emoji:'🧼',sizeRange:'medium',imageSlug:'handwash-round-stoff',image:'products/handwash-round-stoff.webp'},
+  {id:20,brand:'stoff',brandName:'Stoff®',category:'Dishwashing',name:'Dishwash',sizes:'250ml · 500ml · 1L · 5L',variants:['Orange','Yellow'],emoji:'🍽️',sizeRange:'medium',imageSlug:'dishwash-stoff',image:'products/dishwash-stoff-standard.webp'},
+  {id:21,brand:'stoff',brandName:'Stoff®',category:'Glass Care',name:'Glass Cleaner',sizes:'500ml · 5L',variants:['Standard'],emoji:'🪟',sizeRange:'medium',imageSlug:'glass-cleaner-stoff',image:'products/glass-cleaner-stoff.webp'},
+  {id:22,brand:'stoff',brandName:'Stoff®',category:'Bathroom Care',name:'Bathroom Cleaner',sizes:'275ml · 500ml · 5L',variants:['Standard'],emoji:'🚿',sizeRange:'medium',imageSlug:'bathroom-cleaner-stoff',image:'products/bathroom-cleaner-stoff.webp'},
+  {id:23,brand:'stoff',brandName:'Stoff®',category:'Toilet Care',name:'Toilet Cleaner',sizes:'500ml · 5L',variants:['Standard'],emoji:'🚽',sizeRange:'medium',imageSlug:'toilet-cleaner-stoff',image:'products/toilet-cleaner-stoff.webp'},
+  {id:24,brand:'stoff',brandName:'Stoff®',category:'Drain Care',name:'Drain Buster',sizes:'1250ml · 5L',variants:['Standard'],emoji:'🧪',sizeRange:'large',imageSlug:'drain-buster-stoff',image:'products/drain-buster-stoff.webp'},
+  {id:25,brand:'stoff',brandName:'Stoff®',category:'Disinfectant',name:'Bleach',sizes:'600ml · 1250ml · 5L',variants:['Standard'],emoji:'🫧',sizeRange:'medium',imageSlug:'bleach-stoff',image:'products/bleach-stoff.webp'},
+  {id:26,brand:'stoff',brandName:'Stoff®',category:'Floor Care',name:'White Phenyl',sizes:'1L · 3L · 5L',variants:['Standard'],emoji:'🫗',sizeRange:'large',imageSlug:'white-phenyl-stoff',image:'products/white-phenyl-stoff.webp'},
+  {id:27,brand:'stoff',brandName:'Stoff®',category:'Floor Care',name:'Base Phenyl',sizes:'250ml · 5L',variants:['Standard'],emoji:'🌿',sizeRange:'small',imageSlug:'base-phenyl-stoff',image:'products/base-phenyl-stoff.webp'},
+  // LUXAURA — uncomment when images are ready
+  // {id:28,brand:'luxaura',brandName:'Luxaura®',category:'Glass Care',name:'Crystal View',sizes:'500ml · 1L · 5L',variants:['Standard'],emoji:'🪟',sizeRange:'medium',imageSlug:'crystal-view'},
+  // {id:29,brand:'luxaura',brandName:'Luxaura®',category:'Interior Care',name:'Cabin Luxe',sizes:'500ml · 1L · 5L',variants:['Standard'],emoji:'🚗',sizeRange:'medium',imageSlug:'cabin-luxe'},
+  // {id:30,brand:'luxaura',brandName:'Luxaura®',category:'Tyre Care',name:'Black Roll',sizes:'500ml · 1L · 5L',variants:['Standard'],emoji:'🔲',sizeRange:'medium',imageSlug:'black-roll'},
+  // {id:31,brand:'luxaura',brandName:'Luxaura®',category:'Engine Care',name:'Engine Force',sizes:'500ml · 1L · 5L',variants:['Standard'],emoji:'⚙️',sizeRange:'medium',imageSlug:'engine-force'},
+  // {id:32,brand:'luxaura',brandName:'Luxaura®',category:'Car Wash',name:'Foam Rush',sizes:'500ml · 1L · 5L',variants:['Standard'],emoji:'🫧',sizeRange:'medium',imageSlug:'foam-rush'},
+];
+
+let currentBrand='all', currentCat='all', currentSize='all', currentSearch='';
+let currentView='grid';
+let detailSelection=null;
+let suppressHashNav=false;
+let currentDetailId=null;
+const IMAGE_CACHE_V='7';
+
+function imgUrl(path){
+  if(!path) return path;
+  return path+(path.includes('?')?'&':'?')+'v='+IMAGE_CACHE_V;
+}
+
+function slugify(str){
+  return str.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+}
+
+function detailHash(id,variant,size){
+  return `#product/${id}/${slugify(variant)}/${slugify(size)}`;
+}
+
+function parseDetailHash(){
+  const m=location.hash.match(/^#product\/(\d+)(?:\/([^/]+)\/([^/]+))?$/);
+  if(!m) return null;
+  return {id:Number(m[1]),variantSlug:m[2]||null,sizeSlug:m[3]||null};
+}
+
+function getVariantsForSize(p,size){
+  if(isBulkSize(size)) return ['Standard'];
+  if(p.variantsBySize&&p.variantsBySize[size]) return p.variantsBySize[size];
+  return p.variants;
+}
+
+function getAllVariants(p){
+  if(!p.variantsBySize) return p.variants;
+  const seen=new Set(),out=[];
+  getSizeList(p).forEach(sz=>{
+    if(isBulkSize(sz)) return;
+    getVariantsForSize(p,sz).forEach(v=>{if(!seen.has(v)){seen.add(v);out.push(v)}});
+  });
+  return out.length?out:p.variants;
+}
+
+function showVariantPicker(p,size){
+  return !isBulkSize(size)&&getVariantsForSize(p,size).length>1;
+}
+
+function thumbCount(p){
+  return getSizeList(p).reduce((n,s)=>n+(isBulkSize(s)?1:getVariantsForSize(p,s).length),0);
+}
+
+function findVariantBySlug(p,slug,size){
+  const list=size?getVariantsForSize(p,size):getAllVariants(p);
+  return list.find(v=>slugify(v)===slug)||getVariantsForSize(p,size||getSizeList(p)[0])[0];
+}
+
+function findSizeBySlug(p,slug){
+  return getSizeList(p).find(s=>slugify(s)===slug)||getSizeList(p)[0];
+}
+
+function updateDetailHashInPlace(p){
+  if(suppressHashNav||!detailSelection) return;
+  const hash=detailHash(p.id,detailSelection.variant,detailSelection.size);
+  if(location.hash!==hash){
+    suppressHashNav=true;
+    history.replaceState(history.state,null,location.pathname+location.search+hash);
+    suppressHashNav=false;
+  }
+}
+
+function getSizeList(p){
+  return p.sizes.split(' · ').map(s=>s.trim());
+}
+
+function isBulkSize(size){
+  return slugify(size)==='5l';
+}
+
+function hasBulkOption(p){
+  return getSizeList(p).some(s=>isBulkSize(s)||slugify(s)==='3l'||slugify(s)==='1250ml');
+}
+
+function variantImagePath(p,variant,size){
+  return `products/${p.imageSlug}-${slugify(variant)}-${slugify(size)}.webp`;
+}
+
+function getImageCandidates(p,variant,size){
+  if(isBulkSize(size)) return [];
+  const paths=[variantImagePath(p,variant,size)];
+  if(p.image) paths.push(p.image);
+  return paths.map(imgUrl);
+}
+
+function getCardImage(p){
+  return p.image||null;
+}
+
+function loadImageWithFallback(imgEl,paths,onDone){
+  let i=0;
+  function tryNext(){
+    if(i>=paths.length){onDone(false);return;}
+    const test=new Image();
+    test.onload=()=>{imgEl.src=paths[i];onDone(true);};
+    test.onerror=()=>{i++;tryNext();};
+    test.src=paths[i];
+  }
+  tryNext();
+}
+
+function placeholderHTML(p,large){
+  const cls=large?'detail-img-placeholder':'img-placeholder';
+  return `<div class="${cls}"><div class="bottle">${p.emoji}</div><span>${large?'Product image coming soon':'PRODUCT IMAGE'}</span></div>`;
+}
+
+function bulkPlaceholderHTML(size){
+  return `<div class="bulk-pack-placeholder detail-bulk">
+    <div class="bulk-pack-icon">📦</div>
+    <div class="bulk-pack-title">Bulk packaging</div>
+    <div class="bulk-pack-size">${size} — commercial size</div>
+    <div class="bulk-pack-note">Available for wholesale &amp; bulk delivery. Contact us for pricing, MOQ and nationwide delivery.</div>
+  </div>`;
+}
+
+function getCategories(brand){
+  const filtered = brand==='all' ? PRODUCTS : PRODUCTS.filter(p=>p.brand===brand);
+  const cats={};
+  filtered.forEach(p=>{ cats[p.category]=(cats[p.category]||0)+1; });
+  return Object.entries(cats).sort((a,b)=>a[0].localeCompare(b[0]));
+}
+
+function renderCategories(){
+  const cats = getCategories(currentBrand);
+  const el = document.getElementById('categoryFilters');
+  let html = `<div class="filter-item ${currentCat==='all'?'active':''}" onclick="filterCat('all',this)"><span>All Categories</span></div>`;
+  cats.forEach(([cat,cnt])=>{
+    html+=`<div class="filter-item ${currentCat===cat?'active':''}" onclick="filterCat('${cat}',this)"><span>${cat}</span><span class="filter-count">${cnt}</span></div>`;
+  });
+  el.innerHTML=html;
+}
+
+function getVisible(){
+  return PRODUCTS.filter(p=>{
+    if(currentBrand!=='all'&&p.brand!==currentBrand) return false;
+    if(currentCat!=='all'&&p.category!==currentCat) return false;
+    if(currentSize!=='all'){
+      if(currentSize==='large'){
+        if(!hasBulkOption(p)) return false;
+      }else{
+        const s=p.sizeRange;
+        if(currentSize==='small'&&s!=='small') return false;
+        if(currentSize==='medium'&&s!=='medium') return false;
+      }
+    }
+    if(currentSearch){
+      const q=currentSearch.toLowerCase();
+      if(!p.name.toLowerCase().includes(q)&&!p.category.toLowerCase().includes(q)&&!p.brandName.toLowerCase().includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function cardHTML(p){
+  const brand=p.brand;
+  const ribbon=`<div class="brand-ribbon ribbon-${brand}">${p.brandName}</div>`;
+  const imgClass=`product-img ${brand}-img`;
+  const pillClass=`pill pill-${brand}`;
+  const allVars=getAllVariants(p);
+  const pills = allVars.slice(0,4).map(v=>`<span class="${pillClass}">${v}</span>`).join('')
+    + (allVars.length>4?`<span class="${pillClass}">+${allVars.length-4}</span>`:'');
+  const btnClass = brand==='luxaura'?'catalog-btn luxaura-btn':brand==='stoff'?'catalog-btn stoff-btn':'catalog-btn';
+  const cardImg=getCardImage(p);
+  const imgContent = cardImg
+    ? `<img src="${imgUrl(cardImg)}" alt="${p.name}" loading="lazy" decoding="async">`
+    : placeholderHTML(p,false);
+  return `<div class="product-card" data-id="${p.id}" data-brand="${brand}" data-cat="${p.category}" data-size="${p.sizeRange}">
+    ${ribbon}
+    <div class="${imgClass}">${imgContent}</div>
+    <div class="card-body">
+      <div class="card-category"><span class="card-brand-dot" style="background:${brand==='drrinse'?'#0A5C5B':brand==='stoff'?'#0D7C6E':'#B8860B'}"></span>${p.category}</div>
+      <div class="card-name">${p.name}<span class="bulk-badge">Bulk · 5L</span></div>
+      <div class="card-sizes"><strong>Sizes:</strong> ${p.sizes}</div>
+      <div class="variant-pills">${pills}</div>
+      <div class="card-footer-row">
+        <span class="brand-label ${brand}">${p.brandName}</span>
+        <button class="${btnClass}" onclick="event.stopPropagation();openProductDetail(${p.id})">Enquire</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+const SIZE_LABELS={small:'Small (75ml–300ml)',medium:'Medium (300ml–1L)',large:'Bulk (1L–5L)'};
+
+function getProductDescription(p){
+  if(p.description) return p.description;
+  const intro=`${p.name} by ${p.brandName} is a trusted ${p.category.toLowerCase()} solution crafted for homes and businesses.`;
+  const sizes=`Available in ${p.sizes.replace(/ · /g, ', ')} — including bulk packaging up to 5L for commercial and wholesale orders.`;
+  const variants=p.variants[0]==='Standard'
+    ? 'Offered as a standard formulation for reliable, consistent performance.'
+    : `Choose from ${p.variants.length} variants: ${p.variants.join(', ')} — each formulated for a distinct scent and finish.`;
+  return `${intro} ${sizes} ${variants} Part of the Lumina Souq 2026 product portfolio.`;
+}
+
+function renderVariantButtons(p,size,brand,activeVariant){
+  return getVariantsForSize(p,size).map(v=>`<button type="button" class="detail-variant selectable ${brand}${v===activeVariant?' active':''}" data-variant="${v}">${v}</button>`).join('');
+}
+
+function thumbStripHTML(p){
+  const sizes=getSizeList(p);
+  const multiVar=getAllVariants(p).length>1;
+  return sizes.map(s=>{
+    if(isBulkSize(s)){
+      return `<button type="button" class="detail-thumb no-img" data-variant="Standard" data-size="${s}" title="${s}" aria-label="${s}">📦</button>`;
+    }
+    return getVariantsForSize(p,s).map(v=>{
+      const path=variantImagePath(p,v,s);
+      const label=multiVar?`${v} · ${s}`:s;
+      return `<button type="button" class="detail-thumb" data-variant="${v}" data-size="${s}" title="${label}" aria-label="${label}">
+        <img src="${imgUrl(path)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.classList.add('no-img')">
+      </button>`;
+    }).join('');
+  }).join('');
+}
+
+function detailHTML(p){
+  const brand=p.brand;
+  const sizes=getSizeList(p);
+  const initSize=sizes[0];
+  const initVar=getVariantsForSize(p,initSize)[0];
+  const multiVar=showVariantPicker(p,initSize);
+  const multiSize=sizes.length>1;
+  const sizeList=multiSize
+    ? sizes.map(s=>`<button type="button" class="size-chip selectable${s===initSize?' active':''}" data-size="${s}">${s}</button>`).join('')
+    : sizes.map(s=>`<span class="size-chip">${s}</span>`).join('');
+  const variantList=multiVar?renderVariantButtons(p,initSize,brand,initVar):'';
+  const btnClass=`detail-enquire-btn${brand==='stoff'?' stoff':brand==='luxaura'?' luxaura':''}`;
+  const caption=isBulkSize(initSize)?initSize:multiVar&&multiSize?`${initVar} · ${initSize}`:multiVar?initVar:multiSize?initSize:'';
+  const gallery=`<div class="detail-gallery" id="detailGallery" data-product-id="${p.id}">
+    <div class="detail-image-main" id="detailImageMain">
+      <img id="detailMainImg" alt="${p.name}" loading="eager" decoding="async" style="display:none">
+      <div id="detailImgPlaceholder">${placeholderHTML(p,true)}</div>
+    </div>
+    ${thumbCount(p)>1?`<div class="detail-thumbs" id="detailThumbs">${thumbStripHTML(p)}</div>`:''}
+    ${caption?`<div class="detail-image-caption" id="detailImageCaption">${caption}</div>`:''}
+  </div>`;
+  return `<div class="detail-layout">
+    <div class="detail-image-wrap ${brand}-img">${gallery}</div>
+    <div class="detail-info">
+      <div class="detail-brand-tag ${brand}">${p.brandName}</div>
+      <div class="detail-category">${p.category}</div>
+      <h1 class="detail-name">${p.name}</h1>
+      <p class="detail-desc">${getProductDescription(p)}</p>
+      <div class="detail-meta-grid">
+        <div class="detail-meta-item"><div class="detail-meta-label">Brand</div><div class="detail-meta-value">${p.brandName}</div></div>
+        <div class="detail-meta-item"><div class="detail-meta-label">Category</div><div class="detail-meta-value">${p.category}</div></div>
+        <div class="detail-meta-item"><div class="detail-meta-label">Size Range</div><div class="detail-meta-value">${SIZE_LABELS[p.sizeRange]||p.sizeRange}</div></div>
+        <div class="detail-meta-item"><div class="detail-meta-label">Variants</div><div class="detail-meta-value">${getAllVariants(p).length} option${getAllVariants(p).length!==1?'s':''}</div></div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Available Sizes</div>
+        <div class="detail-sizes">${sizeList}</div>
+        ${hasBulkOption(p)?`<p class="detail-bulk-note">📦 Bulk &amp; wholesale delivery available on this product — including 5L commercial packaging. Contact us for pricing and MOQ.</p>`:''}
+      </div>
+      ${getAllVariants(p).length>1?`<div class="detail-section" id="detailVariantSection" style="${multiVar?'':'display:none'}">
+        <div class="detail-section-title">Scents & Variants</div>
+        <div class="detail-variants" id="detailVariants">${variantList}</div>
+      </div>`:''}
+      <div class="detail-actions">
+        <a class="detail-contact-btn" href="mailto:luminasouq2001@gmail.com?subject=Enquiry:%20${encodeURIComponent(p.brandName+' '+p.name)}">Email Enquiry</a>
+        <a class="detail-contact-btn" href="tel:+923107483390">Call +92 310 7483390</a>
+        <button class="${btnClass}" onclick="window.open('https://wa.me/923107483390?text=${encodeURIComponent('Enquiry: ' + p.brandName + ' ' + p.name)}','_blank')">Enquire Now</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function syncDetailSelectionUI(p,sel){
+  document.querySelectorAll('#detailGallery .detail-thumb').forEach(t=>{
+    t.classList.toggle('active',t.dataset.variant===sel.variant&&t.dataset.size===sel.size);
+  });
+  const info=document.querySelector('.detail-info');
+  if(info){
+    info.querySelectorAll('.size-chip').forEach(c=>c.classList.toggle('active',c.dataset.size===sel.size));
+    info.querySelectorAll('.detail-variant').forEach(c=>c.classList.toggle('active',c.dataset.variant===sel.variant));
+  }
+  const cap=document.getElementById('detailImageCaption');
+  if(cap){
+    if(isBulkSize(sel.size)){
+      cap.textContent=sel.size;
+    }else{
+      const multiVar=showVariantPicker(p,sel.size);
+      const multiSize=getSizeList(p).length>1;
+      cap.textContent=multiVar&&multiSize?`${sel.variant} · ${sel.size}`:multiVar?sel.variant:multiSize?sel.size:'';
+    }
+  }
+}
+
+function updateVariantSection(p,size,activeVariant){
+  const section=document.getElementById('detailVariantSection');
+  if(!section) return;
+  const show=showVariantPicker(p,size);
+  section.style.display=show?'':'none';
+  if(show){
+    const varEl=document.getElementById('detailVariants');
+    if(varEl) varEl.innerHTML=renderVariantButtons(p,size,p.brand,activeVariant);
+  }
+}
+
+function setDetailMainImage(p,sel){
+  const img=document.getElementById('detailMainImg');
+  const ph=document.getElementById('detailImgPlaceholder');
+  if(!img||!ph) return;
+  if(isBulkSize(sel.size)){
+    img.classList.remove('loading');
+    img.style.display='none';
+    ph.style.display='flex';
+    ph.innerHTML=bulkPlaceholderHTML(sel.size);
+    return;
+  }
+  img.classList.add('loading');
+  loadImageWithFallback(img,getImageCandidates(p,sel.variant,sel.size),ok=>{
+    img.classList.remove('loading');
+    if(ok){
+      img.style.display='block';
+      ph.style.display='none';
+    }else{
+      img.style.display='none';
+      ph.style.display='flex';
+      ph.innerHTML=placeholderHTML(p,true);
+    }
+  });
+}
+
+function bindDetailGallery(p,initialSel){
+  const sizes=getSizeList(p);
+  const initSize=(initialSel&&initialSel.size)||sizes[0];
+  const initVars=getVariantsForSize(p,initSize);
+  const initVariant=(initialSel&&initVars.includes(initialSel.variant))?initialSel.variant:initVars[0];
+  detailSelection={variant:initVariant,size:initSize};
+  const gallery=document.getElementById('detailGallery');
+  if(!gallery) return;
+
+  function applySelection(){
+    updateVariantSection(p,detailSelection.size,detailSelection.variant);
+    setDetailMainImage(p,detailSelection);
+    syncDetailSelectionUI(p,detailSelection);
+    updateDetailHashInPlace(p);
+  }
+
+  gallery.onclick=e=>{
+    const thumb=e.target.closest('.detail-thumb');
+    if(thumb){
+      detailSelection={variant:thumb.dataset.variant,size:thumb.dataset.size};
+      applySelection();
+      return;
+    }
+  };
+
+  const info=document.querySelector('.detail-info');
+  if(info){
+    info.onclick=e=>{
+      const varBtn=e.target.closest('.detail-variant');
+      if(varBtn){
+        detailSelection.variant=varBtn.dataset.variant;
+        applySelection();
+        return;
+      }
+      const sizeBtn=e.target.closest('.size-chip.selectable');
+      if(sizeBtn&&sizeBtn.dataset.size){
+        detailSelection.size=sizeBtn.dataset.size;
+        const vars=getVariantsForSize(p,detailSelection.size);
+        if(!vars.includes(detailSelection.variant)) detailSelection.variant=vars[0];
+        updateVariantSection(p,detailSelection.size,detailSelection.variant);
+        applySelection();
+      }
+    };
+  }
+
+  applySelection();
+}
+
+function closeProductDetailUI(){
+  document.getElementById('productDetailPage').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function openProductDetail(id,initialSel,skipHash){
+  const p=PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  const sizes=getSizeList(p);
+  const size=(initialSel&&initialSel.size)||sizes[0];
+  const vars=getVariantsForSize(p,size);
+  const variant=(initialSel&&vars.includes(initialSel.variant))?initialSel.variant:vars[0];
+  detailSelection={variant,size};
+  if(!skipHash){
+    const hash=detailHash(id,detailSelection.variant,detailSelection.size);
+    suppressHashNav=true;
+    history.pushState({detail:id},'',location.pathname+location.search+hash);
+    suppressHashNav=false;
+  }
+  document.getElementById('productDetailBody').innerHTML=detailHTML(p);
+  bindDetailGallery(p,detailSelection);
+  document.getElementById('productDetailPage').classList.add('open');
+  document.body.style.overflow='hidden';
+  currentDetailId=id;
+}
+
+function openProductDetailFromHash(parsed){
+  const p=PRODUCTS.find(x=>x.id===parsed.id);
+  if(!p) return;
+  const size=parsed.sizeSlug?findSizeBySlug(p,parsed.sizeSlug):getSizeList(p)[0];
+  const variant=parsed.variantSlug?findVariantBySlug(p,parsed.variantSlug,size):getVariantsForSize(p,size)[0];
+  if(currentDetailId===parsed.id) return;
+  openProductDetail(parsed.id,{variant,size},true);
+}
+
+function closeProductDetail(){
+  closeProductDetailUI();
+  currentDetailId=null;
+  if(!parseDetailHash()) return;
+  suppressHashNav=true;
+  history.replaceState(null,'',location.pathname+location.search);
+  suppressHashNav=false;
+}
+
+function bindProductClicks(){
+  document.getElementById('productsGrid').onclick=function(e){
+    const card=e.target.closest('.product-card');
+    if(!card) return;
+    openProductDetail(Number(card.dataset.id));
+  };
+}
+
+function renderGrid(){
+  const visible=getVisible();
+  const grid=document.getElementById('productsGrid');
+  document.getElementById('resultsCount').innerHTML=`<strong>${visible.length}</strong> product${visible.length!==1?'s':''}`;
+  if(!visible.length){
+    grid.innerHTML=`<div class="empty-state"><div class="e-icon">🔍</div><p>No products match your filters.</p></div>`;
+    return;
+  }
+  if(currentBrand==='all'){
+    const byBrand={drrinse:[],stoff:[],luxaura:[]};
+    visible.forEach(p=>byBrand[p.brand].push(p));
+    let html='';
+    const brandOrder=['drrinse','stoff','luxaura'];
+    const brandTitles={drrinse:'Dr Rinse® — Professional Cleaning Solutions',stoff:'Stoff® — Home Care & Hygiene',luxaura:'Luxaura® — Premium Automotive Care'};
+    brandOrder.forEach(b=>{
+      if(!byBrand[b].length) return;
+      html+=`<div class="brand-divider"><span class="divider-pill divider-${b}">${brandTitles[b]}</span><span class="divider-line"></span></div>`;
+      html+=byBrand[b].map(cardHTML).join('');
+    });
+    grid.innerHTML=html;
+  } else {
+    grid.innerHTML=visible.map(cardHTML).join('');
+  }
+  bindProductClicks();
+}
+
+function filterBrand(brand){
+  currentBrand=brand; currentCat='all';
+  document.querySelectorAll('.brand-tab').forEach(t=>{t.classList.toggle('active',t.dataset.brand===brand)});
+  document.querySelectorAll('.header-nav a').forEach(a=>{a.classList.toggle('active',a.id==='nav-'+brand)});
+  renderCategories(); renderGrid();
+}
+function filterCat(cat,el){
+  currentCat=cat;
+  document.querySelectorAll('#categoryFilters .filter-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid();
+}
+function filterSize(size,el){
+  currentSize=size;
+  document.querySelectorAll('.sidebar .filter-item').forEach(i=>{if(!i.closest('#categoryFilters'))i.classList.remove('active')});
+  el.classList.add('active');
+  renderGrid();
+}
+function handleSearch(){
+  currentSearch=document.getElementById('searchInput').value.trim();
+  renderGrid();
+}
+function setView(view,btn){
+  currentView=view;
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const grid=document.getElementById('productsGrid');
+  grid.classList.toggle('list-view',view==='list');
+  renderGrid();
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProductDetail()});
+
+window.addEventListener('popstate',()=>{
+  if(suppressHashNav) return;
+  const parsed=parseDetailHash();
+  if(parsed) openProductDetailFromHash(parsed);
+  else{
+    closeProductDetailUI();
+    currentDetailId=null;
+  }
+});
+
+renderCategories();
+renderGrid();
+const initialDetail=parseDetailHash();
+if(initialDetail) openProductDetailFromHash(initialDetail);
+</script>
+</body>
+</html>
